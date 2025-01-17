@@ -1,39 +1,31 @@
 package com.example.event_booking.controller;
 
-
-
-import com.example.event_booking.dto.EventDTO;
-import com.example.event_booking.service.EventService;
+import com.example.event_booking.service.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
 public class EventController {
 
-    private final EventService eventService;
+    private final BookingService bookingService;
 
-    @GetMapping
-    public List<EventDTO> getAllEvents() {
-        return eventService.getAllEvents();
+    @PostMapping("/{eventId}/book")
+    public ResponseEntity<String> bookEvent(@PathVariable Long eventId, @RequestParam String username) {
+        String response = bookingService.bookEvent(eventId, username);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping
-    public EventDTO createEvent(@RequestBody EventDTO eventDto, @RequestParam String username) {
-        return eventService.createEvent(eventDto, username);
+    @DeleteMapping("/{eventId}/cancel")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long eventId, @RequestParam String username) {
+        String response = bookingService.cancelBooking(eventId, username);
+        return ResponseEntity.ok(response);
     }
-
-    @PutMapping("/{id}")
-    public EventDTO updateEvent(@PathVariable Long id, @RequestBody EventDto eventDto, @RequestParam String username) {
-        return eventService.updateEvent(id, eventDto, username);
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable Long id, @RequestParam String username) {
-        eventService.deleteEvent(id, username);
-        return "Event deleted successfully!";
+    @GetMapping("/{eventId}/isBooked")
+    public ResponseEntity<Boolean> isEventBooked(@PathVariable Long eventId, @RequestParam String username) {
+        boolean isBooked = bookingService.isEventBookedByUser(eventId, username);
+        return ResponseEntity.ok(isBooked);
     }
 }

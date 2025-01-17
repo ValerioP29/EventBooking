@@ -21,13 +21,13 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
-    public List<EventDto> getAllEvents() {
+    public List<EventDTO> getAllEvents() {
         return eventRepository.findAll().stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    public EventDto createEvent(EventDTO eventDto, String username) {
+    public EventDTO createEvent(EventDTO eventDto, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
 

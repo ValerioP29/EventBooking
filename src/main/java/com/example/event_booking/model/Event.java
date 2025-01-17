@@ -3,11 +3,13 @@ package com.example.event_booking.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
+
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +27,13 @@ public class Event {
     @Column(nullable = false)
     private String location;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private int availableSeats;
 
-    @ManyToOne
-    @JoinColumn (name = "organizer_id", nullable = false)
-    private User organizer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organizer_id", nullable = false)
+    private User creator;
+
+    @ManyToMany(mappedBy = "bookedEvents")
+    private Set<User> attendees = new HashSet<>();
 }

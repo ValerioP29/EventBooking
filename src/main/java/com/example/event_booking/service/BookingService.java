@@ -59,5 +59,15 @@ public class BookingService {
         eventRepository.save(event);
 
         return "Booking canceled for event: " + event.getTitle();
+
+    }
+    public boolean isEventBookedByUser(Long eventId, String username) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+
+        return user.getBookedEvents().contains(event);
     }
 }
