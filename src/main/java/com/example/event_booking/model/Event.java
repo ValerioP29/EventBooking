@@ -17,7 +17,7 @@ public class Event {
     private String title;
 
     @Column(nullable = false)
-    private String descrption;
+    private String description;
 
     @Column(nullable = false)
     private LocalDateTime date;
